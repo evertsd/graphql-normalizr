@@ -3,6 +3,7 @@ const { visit, } = require('graphql')
 const gql = require('graphql-tag')
 
 const { GraphQLNormalizr, } = require('../')
+const { isArray, isObject, map, prop, } = require('../src/utils')
 const {
   customIdKey,
   listAndObject,
@@ -10,6 +11,7 @@ const {
   nested,
   noNested,
   noTypeNames,
+  paginated,
 } = require('./mocks/data')
 
 test('GraphQLNormalizr returns an object with `normalize`, `parse` and `addRequiredFields` methdos', t => {
@@ -123,4 +125,26 @@ test('`parse` adds the required ["id", "__typename"] fields', t => {
     },
   })
   t.true(bool)
+})
+
+test('snapshot :: `normalize` with customValueProcessor', t => {
+  let customValueProcessor = (idKey, value) => {
+    if (isObject(value) && isArray(value.data)) {
+      return map(prop(idKey))(value.data)
+    }
+
+    if (isObject(value)) {
+      return prop(idKey)(value)
+    }
+
+    if (isArray(value)) {
+      return map(prop(idKey))(value)
+    }
+
+    return value
+  }
+
+  const { normalize, } = new GraphQLNormalizr({ valueProcessor: customValueProcessor, })
+
+  t.snapshot(normalize({ data: paginated, }))
 })

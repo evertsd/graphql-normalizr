@@ -37,12 +37,25 @@ function toLists (object = {}) {
   )
 }
 
+function defaultValueProcessor (idKey, value) {
+  if (isObject(value)) {
+    return prop(idKey)(value)
+  }
+
+  if (isArray(value)) {
+    return map(prop(idKey))(value)
+  }
+
+  return value
+};
+
 module.exports = function GraphQLNormalizr ({
   idKey = 'id',
   typeMap = {},
   caching = false,
   lists = false,
   typenames = false,
+  valueProcessor = defaultValueProcessor,
 } = {}) {
   const hasIdField = hasField(idKey)
   const hasTypeNameField = hasField('__typename')
@@ -59,9 +72,7 @@ module.exports = function GraphQLNormalizr ({
     return Object.entries(object).reduce((acc, [ key, value, ]) => {
       return {
         ...acc,
-        [key]: isObject(value)
-          ? prop(idKey)(value)
-          : isArray(value) ? map(prop(idKey))(value) : value,
+        [key]: valueProcessor(idKey, value),
       }
     }, {})
   }

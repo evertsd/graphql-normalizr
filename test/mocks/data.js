@@ -306,6 +306,58 @@ const listAndObject = {
   },
 }
 
+const paginated = {
+  allUsers: [
+    {
+      __typename: 'User',
+      id: '5a6cf127c2b20834f6551481',
+      email: 'Madisen_Braun@hotmail.com',
+      posts: {
+        count: 2,
+        __typename: 'PaginatedPostList',
+        data: [
+          {
+            __typename: 'Post',
+            id: '5a6cf127c2b20834f6551483',
+            title: 'Aut aut reiciendis',
+          },
+          {
+            __typename: 'Post',
+            id: '5a6cf127c2b20834f6551485',
+            title: 'Nesciunt esse',
+          },
+        ],
+      },
+    },
+    {
+      __typename: 'User',
+      id: '5a6cf127c2b20834f6551482',
+      email: 'Robel.Ansel@yahoo.com',
+      posts: {
+        count: 2,
+        __typename: 'PaginatedPostList',
+        data: [
+          {
+            __typename: 'Post',
+            id: '5a6cf127c2b20834f6551484',
+            title: 'Sunt ut aut',
+          },
+          {
+            __typename: 'Post',
+            id: '5a6cf127c2b20834f6551486',
+            title: 'Nihil assumenda',
+          },
+        ],
+      },
+    },
+  ],
+  findComment: {
+    __typename: 'Comment',
+    id: '5a6cf127c2b20834f655148a',
+    message: 'Voluptates ex sint amet repellendus impedit nam.',
+  },
+}
+
 module.exports = {
   customIdKey,
   listAndObject,
@@ -313,4 +365,5 @@ module.exports = {
   nested,
   noNested,
   noTypeNames,
+  paginated,
 }
